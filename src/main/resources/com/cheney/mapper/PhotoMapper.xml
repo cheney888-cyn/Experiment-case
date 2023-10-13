@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cheney.mapper.PhotoMapper">
+    <resultMap id="photoResultMap" type="photo">
+        <result property="id" column="id" />
+        <result property="file_path" column="file_path" />
+        <result property="capture_time" column="capture_time" />
+        <result property="location" column="location" />
+        <result property="description" column="description" />
+    </resultMap>
+    <insert id="addPhoto" useGeneratedKeys="true" keyProperty="id">
+
+    </insert>
+    <delete id="deleteByIds">
+        delete from photo where photo_id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectByPageAndCondition" resultMap="photoResultMap">
+        select *
+        from photo
+        <where>
+            <if test="brand.brandName != null and brand.brandName != '' ">
+                and  brand_name like #{brand.brandName}
+            </if>
+
+        </where>
+
+        limit #{begin} , #{size}
+
+    </select>
+
+
+</mapper>
